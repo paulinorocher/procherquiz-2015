@@ -1,4 +1,6 @@
 var models = require('../models/models.js');
+models.url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+models.dialect = (models.url[1]||null);
 
 // Autoload - factoriza el código si ruta incluye :quizId
 exports.load = function(req,res, next, quizId){
@@ -16,11 +18,16 @@ exports.load = function(req,res, next, quizId){
 exports.index = function(req,res){
 	req.query.search = req.query.search||"";
 	req.query.search = req.query.search.replace(" ", "%");
-	models.Quiz.findAll({where: ["pregunta ilike ?","%"+req.query.search+"%"], order: "pregunta"}).then(
+
+	var LIKE = "like";
+	if(models.dialect === "postgres")
+		LIKE = "ilike"
+	
+	models.Quiz.findAll({where: ["pregunta " + LIKE + " ?","%"+req.query.search+"%"], order: "pregunta"}).then(
 		function(quizes){
 			res.render('quizes/index.ejs', {quizes: quizes, search: req.query.search});
 		}
-	).catch(function(error) { next(error);});
+		).catch(function(error) { next(error);});		
 };
 
 // GET /quizes/question
