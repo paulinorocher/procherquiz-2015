@@ -13,7 +13,7 @@ var routes = require('./routes/index');
 var app = express();
 
 var sessionDateTime = new Date();   // Fecha y hora de la ultima transaccion
-var interval = 10;                  // Intervalo en segundos tras el cual se hara auto logout
+var interval = 20;                  // Intervalo en segundos tras el cual se hara auto logout
 var timeout = 0;
 
 // view engine setup

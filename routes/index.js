@@ -4,16 +4,27 @@ var router = express.Router();
 var quizController = require('../controllers/quiz_controller');
 var commentController = require('../controllers/comment_controller');
 var sessionController = require('../controllers/session_controller');
+var statisticsController = require('../controllers/statistics_controller')
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', {title: 'Quiz', errors: []});
+  	res.render('index', {title: 'Quiz', errors: []});
 });
 
 /* GET author page. */
 router.get('/author', function(req, res) {
-  res.render('author', {errors: []});
+  	res.render('author', {errors: []});
 });
+
+/* GET statistics page. */
+router.get('/statistics', 	statisticsController.noQuestions,
+							statisticsController.noComments,
+							statisticsController.avgCommentsPerQuestion,
+							statisticsController.noQuestionsNoComments,
+							statisticsController.noQuestionsWithComments,
+							statisticsController.show);
+
+//router.get('/statistics', statisticsController.index);
 
 // Autoload de comandos con :quizId
 router.param('quizId', quizController.load);		// autoload :quizId

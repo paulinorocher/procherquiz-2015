@@ -29,15 +29,15 @@ exports.index = function(req,res){
 
 	var LIKE = "like";
 	if(models.dialect === "postgres")
-		LIKE = "ilike"
+		LIKE = "ilike";
 
 	models.Quiz.findAll({where: ["pregunta " + LIKE + " ?","%"+req.query.search+"%"], order: "pregunta"}).then(
 		function(quizes){
 			res.render('quizes/index.ejs', {quizes: quizes, search: req.query.search, errors: []});
 		}
-		).catch(function(error) { 
-			next(error);
-		});		
+	).catch(function(error) { 
+		next(error);
+	});		
 };
 
 // GET /quizes/question
